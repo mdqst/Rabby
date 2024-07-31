@@ -350,7 +350,7 @@ const AddressItem = memo(
                       />
                     </>
                   ) : (
-                    <span className="text-15 font-medium text-white w-full truncate">
+                    <span className="text-15 font-medium text-white w-full truncate text-right">
                       ${splitNumberByStep(balance?.toFixed(2))}
                     </span>
                   )}
