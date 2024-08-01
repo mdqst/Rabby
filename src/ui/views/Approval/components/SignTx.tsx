@@ -32,6 +32,7 @@ import {
   MINIMUM_GAS_LIMIT,
   GAS_TOP_UP_ADDRESS,
   CAN_ESTIMATE_L1_FEE_CHAINS,
+  EVENTS,
 } from 'consts';
 import { addHexPrefix, isHexPrefixed, isHexString } from 'ethereumjs-util';
 import React, { ReactNode, useEffect, useMemo, useRef, useState } from 'react';
@@ -47,7 +48,7 @@ import {
   isStringOrNumber,
   useCommonPopupView,
 } from 'ui/utils';
-import { WaitingSignComponent } from './map';
+import { WaitingSignComponent, WaitingSignMessageComponent } from './map';
 import GnosisDrawer from './TxComponents/GnosisDrawer';
 import Loading from './TxComponents/Loading';
 import { useLedgerDeviceConnected } from '@/ui/utils/ledger';
@@ -82,6 +83,8 @@ import GasSelectorHeader, {
   GasSelectorResponse,
 } from './TxComponents/GasSelectorHeader';
 import { GasLessConfig } from './FooterBar/GasLessComponents';
+import { waitSignComponentAmounted } from '@/utils/signEvent';
+import eventBus from '@/eventBus';
 
 interface BasicCoboArgusInfo {
   address: string;
@@ -1200,6 +1203,37 @@ const SignTx = ({ params, origin }: SignTxProps) => {
       );
     }
     const typedData = await wallet.gnosisGenerateTypedData();
+
+    if (
+      [KEYRING_CLASS.PRIVATE_KEY, KEYRING_CLASS.MNEMONIC].includes(
+        account.type as any
+      )
+    ) {
+      waitSignComponentAmounted().then(() => {
+        wallet.signTypedData(
+          account.type,
+          account.address,
+          JSON.parse(JSON.stringify(typedData)),
+          {
+            brandName: account.brandName,
+            version: 'V4',
+          }
+        );
+        if (isSend) {
+          wallet.clearPageStateCache();
+        }
+      });
+      resolveApproval({
+        uiRequestComponent: WaitingSignMessageComponent[account.type],
+        type: account.type,
+        address: account.address,
+        data: [account.address, JSON.stringify(typedData)],
+        isGnosis: true,
+        account: account,
+      });
+
+      return;
+    }
     resolveApproval({
       data: [account.address, JSON.stringify(typedData)],
       session: params.session,
