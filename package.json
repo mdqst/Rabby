@@ -6,7 +6,7 @@
     "clean": "mkdir -p dist && rm -rf dist/*",
     "make-theme": "node ./scripts/make-theme.js",
     "build:dev:default": "npm run clean && npm run make-theme && cross-env TAILWIND_MODE=watch webpack --progress --env config=dev",
-    "build:pro:default": "npm run clean && npm run make-theme && webpack --progress --env config=pro",
+    "build:pro:default": "npm run clean && npm run make-theme && cross-env NODE_BUILD_ENV=production webpack --progress --env config=pro",
     "build:debug:default": "npm run clean && npm run make-theme && webpack --progress --env config=debug",
     "build:dev:mv2": "npm run build:dev:default",
     "build:pro:mv2": "npm run build:pro:default",

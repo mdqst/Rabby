@@ -12,7 +12,10 @@ const CopyPlugin = require('copy-webpack-plugin');
 const createStyledComponentsTransformer = require('typescript-plugin-styled-components')
   .default;
 
-const isEnvDevelopment = process.env.NODE_ENV !== 'production';
+const isEnvDevelopment = process.env.NODE_BUILD_ENV != 'production';
+console.log('process.env.NODE_BUILD_ENV', process.env.NODE_BUILD_ENV);
+console.log('isEnvDevelopment', isEnvDevelopment);
+// process.exit(0);
 
 const paths = require('./paths');
 
@@ -97,7 +100,7 @@ const config = {
                 before: [
                   // @see https://github.com/Igorbek/typescript-plugin-styled-components#ts-loader
                   createStyledComponentsTransformer({
-                    ssr: true, // always enable it to make all styled generated component has id.
+                    ssr: isEnvDevelopment, // always enable it to make all styled generated component has id.
                     displayName: isEnvDevelopment,
                     minify: false, // it's still an experimental feature
                     componentIdPrefix: 'rabby-',
