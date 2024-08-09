@@ -4236,7 +4236,6 @@ export class WalletController extends BaseController {
   ethSendTransaction = (
     ...args: Parameters<typeof providerController.ethSendTransaction>
   ) => providerController.ethSendTransaction(...args);
-  getDeBankHiStatus = debankService.getDebankHi;
 }
 
 const wallet = new WalletController();
