@@ -195,7 +195,11 @@ export const Slippage = memo((props: SlippageProps) => {
         >
           <SlippageItem
             onClick={(event) => {
+              if (autoSlippage) {
+                return;
+              }
               event.stopPropagation();
+              onChange(value);
               setAutoSlippage(true);
               setIsCustomSlippage(false);
             }}
