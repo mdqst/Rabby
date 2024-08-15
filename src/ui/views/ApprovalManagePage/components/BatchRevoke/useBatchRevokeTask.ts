@@ -371,6 +371,10 @@ export const useBatchRevokeTask = () => {
   const [status, setStatus] = React.useState<
     'idle' | 'active' | 'paused' | 'completed'
   >('idle');
+  const [txStatus, setTxStatus] = React.useState<'sended' | 'signed' | 'idle'>(
+    'idle'
+  );
+  const currentApprovalRef = React.useRef<AssetApprovalSpender>();
 
   const addRevokeTask = React.useCallback(
     async (
@@ -380,6 +384,7 @@ export const useBatchRevokeTask = () => {
     ) => {
       return queueRef.current.add(
         async () => {
+          currentApprovalRef.current = item;
           const cloneItem = cloneAssetApprovalSpender(item);
           const revokeItem =
             revokeList[
@@ -429,26 +434,37 @@ export const useBatchRevokeTask = () => {
 
             // submit tx
             let hash = '';
+            setTxStatus('sended');
+
             try {
-              hash = await wallet.ethSendTransaction({
-                data: {
-                  $ctx: {},
-                  params: [transaction],
-                },
-                session: INTERNAL_REQUEST_SESSION,
-                approvalRes: {
-                  ...transaction,
-                  signingTxId,
-                  logId: logId,
-                },
-                pushed: false,
-                result: undefined,
-              });
+              hash = await Promise.race([
+                wallet.ethSendTransaction({
+                  data: {
+                    $ctx: {},
+                    params: [transaction],
+                  },
+                  session: INTERNAL_REQUEST_SESSION,
+                  approvalRes: {
+                    ...transaction,
+                    signingTxId,
+                    logId: logId,
+                  },
+                  pushed: false,
+                  result: undefined,
+                }),
+                new Promise((_, reject) => {
+                  eventBus.once(EVENTS.LEDGER.REJECTED, async (data) => {
+                    reject(new Error(data));
+                  });
+                }),
+              ]);
             } catch (e) {
               const err = new Error(e.message);
               err.name = 'SubmitTxFailed';
               throw err;
             }
+
+            setTxStatus('signed');
 
             // wait tx completed
             const { gasUsed } = await new Promise<{ gasUsed: number }>(
@@ -495,6 +511,7 @@ export const useBatchRevokeTask = () => {
             };
           } finally {
             setList((prev) => updateAssetApprovalSpender(prev, cloneItem));
+            setTxStatus('idle');
           }
         },
         { priority }
@@ -547,6 +564,18 @@ export const useBatchRevokeTask = () => {
     };
   }, []);
 
+  const totalApprovals = React.useMemo(() => {
+    return revokeList.length;
+  }, [revokeList]);
+
+  const revokedApprovals = React.useMemo(() => {
+    return list.filter((item) => item.$status?.status === 'success').length;
+  }, [list]);
+
+  const currentApprovalIndex = React.useMemo(() => {
+    return list.findIndex((item) => item.$status?.status === 'pending');
+  }, [list]);
+
   return {
     list,
     init,
@@ -554,7 +583,12 @@ export const useBatchRevokeTask = () => {
     continue: handleContinue,
     pause,
     status,
+    txStatus,
     addRevokeTask,
+    totalApprovals,
+    revokedApprovals,
+    currentApprovalIndex,
+    currentApprovalRef,
   };
 };
 
