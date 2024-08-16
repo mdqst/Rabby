@@ -271,7 +271,10 @@ const flowContext = flow
             })
         );
       });
-    notificationService.setCurrentRequestDeferFn(requestDeferFn);
+
+    if (!approvalRes?.isGnosis) {
+      notificationService.setCurrentRequestDeferFn(requestDeferFn);
+    }
     const requestDefer = requestDeferFn();
     async function requestApprovalLoop({ uiRequestComponent, ...rest }) {
       ctx.request.requestedApproval = true;
