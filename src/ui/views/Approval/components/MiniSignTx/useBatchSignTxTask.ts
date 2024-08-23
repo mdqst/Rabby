@@ -45,19 +45,21 @@ export const useBatchSignTxTask = () => {
   );
 
   const init = useMemoizedFn((list: ListItemType[]) => {
+    console.log('batch init', list);
     setList(list);
     setStatus('idle');
   });
 
   const start = useMemoizedFn(async (current = 0) => {
-    console.log('list', list);
     try {
       setStatus('active');
       for (let index = current; index < list.length; index++) {
         const item = list[index];
         const tx = item.tx;
         const options = item.options;
-        console.log(item);
+        if (item.status === 'signed') {
+          continue;
+        }
 
         try {
           const result = await sendTransaction({
