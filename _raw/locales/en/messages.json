@@ -2169,7 +2169,7 @@
         "txCreated": "Transaction created",
         "txSigned": "Signed. Creating transaction",
         "txSending": "Sending signing request",
-        "txSendings": "Sending signing request({current}/{total})"
+        "txSendings": "Sending signing request({{current}}/{{total}})"
       }
     }
   },
