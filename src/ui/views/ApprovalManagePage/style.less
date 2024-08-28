@@ -517,9 +517,12 @@
     }
   }
 
-  &.tip-column-contract-trust-value .ant-tooltip-inner {
-    width: 350px;
-  }
+  &.tip-column-contract-trust-value {
+    max-width: unset !important;
+    .ant-tooltip-inner {
+      width: 350px;
+    }
+  } 
 }
 
 .J_permit2-tooltip .ant-tooltip-content {
