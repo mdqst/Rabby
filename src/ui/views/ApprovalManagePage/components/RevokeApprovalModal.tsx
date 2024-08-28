@@ -319,7 +319,7 @@ export const RevokeApprovalModal = (props: {
                   />
                 </div>
               ) : (
-                <div className="ml-[8px] text-13 text-r-neutral-title1 font-medium leading-[15px]">
+                <div className="ml-[8px] text-13 text-r-neutral-title1 font-medium leading-[15px] max-w-[180px] truncate">
                   {getTokenSymbol(spenderHost)}
                 </div>
               )}
