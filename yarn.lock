@@ -4738,10 +4738,10 @@
     sinon-chrome "^3.0.1"
     webextension-polyfill "0.7.0"
 
-"@rabby-wallet/rabby-api@0.7.27":
-  version "0.7.27"
-  resolved "https://registry.yarnpkg.com/@rabby-wallet/rabby-api/-/rabby-api-0.7.27.tgz#580e53f46eddb29dc32dd9d3ae17a63aa14883cc"
-  integrity sha512-e5UTdP1qafom86PfvPagASYEOxu9CNrG0YQCgcOCefoMAnV3MHUQmNQvyPy+tcFjNZ7fuY3RunHz/HBbu2kpfg==
+"@rabby-wallet/rabby-api@0.7.29":
+  version "0.7.29"
+  resolved "https://registry.yarnpkg.com/@rabby-wallet/rabby-api/-/rabby-api-0.7.29.tgz#44be71f2832c6ccd3d234c110ce8b3d1850fedd7"
+  integrity sha512-zVoWsidB7xpjpKf6atnLhLGuOB4Hi8oySWoi5AwlFe26OqRe9kvfNey2F3i4Eys/mPionSppNyQMb4YJxuUdUQ==
   dependencies:
     "@rabby-wallet/rabby-sign" "^0.3.3"
     axios "^0.27.2"
