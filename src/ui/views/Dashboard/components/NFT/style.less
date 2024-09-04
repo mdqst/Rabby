@@ -104,7 +104,7 @@
     font-size: 15px;
     line-height: 18px;
     color: var(--r-neutral-title-1, #F7FAFC);
-    border-bottom: 1px solid var(--r-neutral-line, rgba(255, 255, 255, 0.10));
+    border-bottom: 0.5px solid var(--r-neutral-line, rgba(255, 255, 255, 0.10));
     padding-top: 16px;
     padding-bottom: 12px;
     white-space: nowrap;
@@ -114,32 +114,32 @@
 
   &-list {
     padding-top: 12px;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
 
     &-item {
       display: flex;
       align-items: center;
       justify-content: space-between;
       margin-bottom: 12px;
+      color: var(--r-neutral-title-1, #192945);
 
       &:nth-last-child(1) {
         margin-bottom: 0;
       }
 
       &-label {
-        font-weight: 500;
+        font-weight: 400;
         font-size: 12px;
         line-height: 14px;
-        color: var(--r-neutral-title-1, #F7FAFC);
       }
 
       &-value {
+        font-weight: 510;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
         font-size: 12px;
         line-height: 14px;
-        color: var(--r-neutral-foot, #BABEC5);
       }
     }
   }
