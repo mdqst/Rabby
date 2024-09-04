@@ -100,15 +100,15 @@ const AccountCard = ({
               showArrow={false}
               address={currentAccount.address}
               className={clsx(
-                'text-12 opacity-60',
-                alianName ? 'opacity-80 send-viewer' : 'text-white'
+                'text-12',
+                alianName ? 'send-viewer' : 'text-white'
               )}
             />
           </div>
         )}
         {!isHideAmount ? (
           <span
-            className="amount truncate"
+            className="truncate amount"
             title={splitNumberByStep((balance || 0).toFixed(2))}
           >
             ${splitNumberByStep((balance || 0).toFixed(2))}
