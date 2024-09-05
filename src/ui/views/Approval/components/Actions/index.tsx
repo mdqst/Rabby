@@ -1,31 +1,29 @@
-import { Result } from '@rabby-wallet/rabby-security-engine';
-import { Chain, ExplainTxResponse } from 'background/service/openapi';
-import React, { useEffect, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import BalanceChange from '../TxComponents/BalanceChange';
-import ViewRawModal from '../TxComponents/ViewRawModal';
-import { getActionTypeText } from './utils';
+import ChainIcon from '@/ui/component/ChainIcon';
+import ThemeIcon from '@/ui/component/ThemeMode/ThemeIcon';
+import { TooltipWithMagnetArrow } from '@/ui/component/Tooltip/TooltipWithMagnetArrow';
+import { useWallet } from '@/ui/utils';
 import {
   ActionRequireData,
   ParsedTransactionActionData,
 } from '@rabby-wallet/rabby-action';
-import { ReactComponent as RcIconArrowRight } from 'ui/assets/approval/edit-arrow-right.svg';
-import IconSpeedUp from 'ui/assets/sign/tx/speedup.svg';
-import { ReactComponent as IconQuestionMark } from 'ui/assets/sign/question-mark.svg';
-import { TooltipWithMagnetArrow } from '@/ui/component/Tooltip/TooltipWithMagnetArrow';
-import { NoActionAlert } from '../NoActionAlert/NoActionAlert';
+import { Result } from '@rabby-wallet/rabby-security-engine';
+import { Chain, ExplainTxResponse } from 'background/service/openapi';
 import clsx from 'clsx';
-import ThemeIcon from '@/ui/component/ThemeMode/ThemeIcon';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { ReactComponent as RcIconArrowRight } from 'ui/assets/approval/edit-arrow-right.svg';
+import { ReactComponent as IconQuestionMark } from 'ui/assets/sign/question-mark.svg';
+import IconSpeedUp from 'ui/assets/sign/tx/speedup.svg';
 import { ActionWrapper } from '../ActionWrapper';
-import { OriginInfo } from '../OriginInfo';
 import { Card } from '../Card';
 import { Divide } from '../Divide';
+import { NoActionAlert } from '../NoActionAlert/NoActionAlert';
+import { OriginInfo } from '../OriginInfo';
+import BalanceChange from '../TxComponents/BalanceChange';
+import ViewRawModal from '../TxComponents/ViewRawModal';
 import { Col, Row } from './components/Table';
-import LogoWithText from './components/LogoWithText';
 import { TransactionActionList } from './components/TransactionActionList';
-import { BatchRevokePermit2 } from './BatchRevokePermit2';
-import ChainIcon from '@/ui/component/ChainIcon';
-import { useWallet } from '@/ui/utils';
+import { getActionTypeText } from './utils';
 
 const Actions = ({
   data,

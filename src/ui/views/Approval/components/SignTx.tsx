@@ -78,8 +78,6 @@ import GasSelectorHeader, {
 } from './TxComponents/GasSelectorHeader';
 import { GasLessConfig } from './FooterBar/GasLessComponents';
 import { adjustV } from '@/ui/utils/gnosis';
-import { useGasAccountSign } from '../../GasAccount/hooks';
-import gasAccount from '@/background/service/gasAccount';
 import { useGasAccountTxsCheck } from '../../GasAccount/hooks/checkTxs';
 import {
   fetchActionRequiredData,
