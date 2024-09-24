@@ -1,6 +1,7 @@
 import * as ethUtil from 'ethereumjs-util';
 import * as sigUtil from 'eth-sig-util';
 import TransportWebHID from '@ledgerhq/hw-transport-webhid';
+import TransportWebBle from '@ledgerhq/hw-transport-web-ble';
 import Transport from '@ledgerhq/hw-transport';
 import LedgerEth, { ledgerService } from '@ledgerhq/hw-app-eth';
 import { is1559Tx } from '@/utils/transaction';
@@ -133,7 +134,7 @@ class LedgerBridgeKeyring {
   async makeApp(signing = false) {
     if (!this.app) {
       try {
-        this.transport = await TransportWebHID.create();
+        this.transport = await TransportWebBle.create();
         this.app = new LedgerEth(this.transport);
       } catch (e: any) {
         if (!e.message?.includes('The device is already open')) {
