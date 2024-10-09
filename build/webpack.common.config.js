@@ -21,6 +21,10 @@ const BUILD_GIT_HASH = child_process
   .toString()
   .trim();
 
+// 'chrome-mv2', 'chrome-mv3', 'firefox-mv2', 'firefox-mv3'
+const MANIFEST_TYPE = process.env.MANIFEST_TYPE || 'mv2';
+const IS_MANIFEST_MV3 = MANIFEST_TYPE.includes('-mv3');
+
 const config = {
   entry: {
     background: paths.rootResolve('src/background/index.ts'),
@@ -235,12 +239,10 @@ const config = {
       patterns: [
         { from: paths.rootResolve('_raw'), to: paths.rootResolve('dist') },
         {
-          from: process.env.ENABLE_MV3
-            ? paths.rootResolve('src/manifest/mv3/manifest.json')
-            : paths.rootResolve('src/manifest/mv2/manifest.json'),
+          from: paths.rootResolve(`src/manifest/${MANIFEST_TYPE}/manifest.json`),
           to: paths.dist,
         },
-        process.env.ENABLE_MV3
+        IS_MANIFEST_MV3
           ? {
               from: require.resolve(
                 '@trezor/connect-webextension/build/content-script.js'
@@ -257,7 +259,7 @@ const config = {
                 'dist/vendor/trezor/trezor-content-script.js'
               ),
             },
-        process.env.ENABLE_MV3
+          IS_MANIFEST_MV3
           ? {
               from: require.resolve(
                 '@trezor/connect-webextension/build/trezor-connect-webextension.js'
