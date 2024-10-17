@@ -25,6 +25,7 @@ const BUILD_GIT_HASH = child_process
 const MANIFEST_TYPE = process.env.MANIFEST_TYPE || 'chrome-mv2';
 const IS_MANIFEST_MV3 = MANIFEST_TYPE.includes('-mv3');
 const FINAL_DIST = IS_MANIFEST_MV3 ? paths.dist : paths.distMv2;
+const IS_FIREFOX = MANIFEST_TYPE.includes('firefox');
 
 const config = {
   entry: {
@@ -216,7 +217,9 @@ const config = {
     new HtmlWebpackPlugin({
       inject: true,
       template: paths.backgroundHtml,
-      chunks: ['background', 'bg-chunk1', 'bg-chunk2', 'bg-chunk3'],
+      chunks: ['background'].concat(
+        IS_FIREFOX ? ['bg-chunk1', 'bg-chunk2', 'bg-chunk3'] : []
+      ),
       filename: 'background.html',
     }),
     new HtmlWebpackPlugin({
@@ -240,7 +243,9 @@ const config = {
       patterns: [
         { from: paths.rootResolve('_raw'), to: FINAL_DIST },
         {
-          from: paths.rootResolve(`src/manifest/${MANIFEST_TYPE}/manifest.json`),
+          from: paths.rootResolve(
+            `src/manifest/${MANIFEST_TYPE}/manifest.json`
+          ),
           to: FINAL_DIST,
         },
         IS_MANIFEST_MV3
@@ -249,7 +254,8 @@ const config = {
                 '@trezor/connect-webextension/build/content-script.js'
               ),
               to: path.resolve(
-                FINAL_DIST, './vendor/trezor/trezor-content-script.js'
+                FINAL_DIST,
+                './vendor/trezor/trezor-content-script.js'
               ),
             }
           : {
@@ -257,16 +263,18 @@ const config = {
                 '@trezor/connect-web/lib/webextension/trezor-content-script.js'
               ),
               to: path.resolve(
-                FINAL_DIST, './vendor/trezor/trezor-content-script.js'
+                FINAL_DIST,
+                './vendor/trezor/trezor-content-script.js'
               ),
             },
-          IS_MANIFEST_MV3
+        IS_MANIFEST_MV3
           ? {
               from: require.resolve(
                 '@trezor/connect-webextension/build/trezor-connect-webextension.js'
               ),
               to: path.resolve(
-                FINAL_DIST, './vendor/trezor/trezor-connect-webextension.js'
+                FINAL_DIST,
+                './vendor/trezor/trezor-connect-webextension.js'
               ),
             }
           : {
@@ -274,7 +282,8 @@ const config = {
                 '@trezor/connect-web/lib/webextension/trezor-usb-permissions.js'
               ),
               to: path.resolve(
-                FINAL_DIST, './vendor/trezor/trezor-usb-permissions.js'
+                FINAL_DIST,
+                './vendor/trezor/trezor-usb-permissions.js'
               ),
             },
       ],
@@ -306,24 +315,26 @@ const config = {
           name: 'webextension-polyfill',
           chunks: 'all',
         },
-        bgChunk1: {
-          test: /[\\/]node_modules[\\/](@rabby-wallet|ethers|@ethersproject|@chainsafe|@trezor|@safe-global|@walletconnect)[\\/]/,
-          name: 'bg-chunk1',
-          chunks: (chunk) => chunk.name === 'background',
-          minSize: 0,
-        },
-        bgChunk2: {
-          test: /[\\/]node_modules[\\/](@keystonehq|@eth-optimism|@coinbase|gridplus-sdk)[\\/]/,
-          name: 'bg-chunk2',
-          chunks: (chunk) => chunk.name === 'background',
-          minSize: 0,
-        },
-        bgChunk3: {
-          test: /[\\/]node_modules[\\/](@imkey|@onekeyfe|@ethereumjs|viem|@metamask)[\\/]/,
-          name: 'bg-chunk3',
-          chunks: (chunk) => chunk.name === 'background',
-          minSize: 0,
-        },
+        ...(IS_FIREFOX && {
+          bgChunk1: {
+            test: /[\\/]node_modules[\\/](@rabby-wallet|ethers|@ethersproject|@chainsafe|@trezor|@safe-global|@walletconnect)[\\/]/,
+            name: 'bg-chunk1',
+            chunks: (chunk) => chunk.name === 'background',
+            minSize: 0,
+          },
+          bgChunk2: {
+            test: /[\\/]node_modules[\\/](@keystonehq|@eth-optimism|@coinbase|gridplus-sdk)[\\/]/,
+            name: 'bg-chunk2',
+            chunks: (chunk) => chunk.name === 'background',
+            minSize: 0,
+          },
+          bgChunk3: {
+            test: /[\\/]node_modules[\\/](@imkey|@onekeyfe|@ethereumjs|viem|@metamask)[\\/]/,
+            name: 'bg-chunk3',
+            chunks: (chunk) => chunk.name === 'background',
+            minSize: 0,
+          },
+        }),
         uiVender: {
           test: /[\\/]node_modules[\\/]/,
           name: 'ui-vender',
