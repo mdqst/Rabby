@@ -55,9 +55,9 @@ class LatticeKeyring extends OldLatticeKeyring {
         params: {
           url,
         },
-      })
+      });
 
-      return creds;
+      return creds.result;
     } catch (err: any) {
       throw new Error(err);
     }
